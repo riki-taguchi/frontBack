@@ -13,7 +13,7 @@ HTML、Python、JavaScriptを使用したファイル管理システムです。
 
 5.SSMSのデータベースフォルダに、TestDbというデータベースを作る
 
-6.fileAdd.pyの(localdb)\\MSSQLLocalDBを自分のSQLのサーバー名に書き換える
+6.fileAdd.pyの(localdb)\\\\MSSQLLocalDBを自分のSQLのサーバー名に書き換える
 
 7.fileAdd.pyを実行してサーバーを起動する
 

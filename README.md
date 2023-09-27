@@ -1,0 +1,2 @@
+# frontBack
+HTML、Python、JavaScriptを使用したファイル管理システムです。kintoneアプリを自力で作りたいと思い、これを開発しました。フロントエンドはHTML,JavaScript、バックエンドはPythonです。保存した画像ファイルをダイアログで見ることができます。

@@ -35,9 +35,10 @@ class FileAddDialog {
         /** 閉じるボタン（ヘッダー） */
         const closeIconButton = document.createElement('button');
         closeIconButton.type = 'button';
-        closeIconButton.className = 'btn-close';
-        closeIconButton.setAttribute('data-bs-dismiss', 'modal');
+        closeIconButton.className = 'close';
+        closeIconButton.setAttribute('data-dismiss', 'modal');
         closeIconButton.setAttribute('aria-label', 'Close');
+        closeIconButton.innerHTML = '&times;';
 
         /** モーダル本体上部 */
         const modalBody1 = document.createElement('div');
@@ -51,7 +52,6 @@ class FileAddDialog {
         /** ファイル参照ラベル */
         const fileReferenceLabel = document.createElement('label');
         fileReferenceLabel.appendChild(document.createTextNode('参照'));
-        //fileReferenceLabel.className = 'kintoneplugin-button-normal';
         fileReferenceLabel.style.cursor = 'pointer';
 
         /** ファイル参照 */

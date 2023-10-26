@@ -145,14 +145,15 @@ class FilePreviewDialog {
         /** モーダルタイトル */
         const modalTitle = document.createElement('h5');
         modalTitle.className = 'modal-title';
-        modalTitle.innerText = '化学の課題：指標表';
+        modalTitle.innerText = '画像プレビュー';
 
         /** 閉じるボタン（ヘッダー） */
         const closeIconButton = document.createElement('button');
         closeIconButton.type = 'button';
-        closeIconButton.className = 'btn-close';
-        closeIconButton.setAttribute('data-bs-dismiss', 'modal');
+        closeIconButton.className = 'close';
+        closeIconButton.setAttribute('data-dismiss', 'modal');
         closeIconButton.setAttribute('aria-label', 'Close');
+        closeIconButton.innerHTML = '&times;';
 
         /** モーダル本体 */
         const modalBody = document.createElement('div');
@@ -205,6 +206,70 @@ class FilePreviewDialog {
         let modalFooter = document.createElement('div');
         modalFooter.className = 'modal-footer';
 
+        /** 回転ボタングループ */
+        const rotateButtonGroup = document.createElement('div');
+        rotateButtonGroup.className = 'btn-group ml-auto';
+        rotateButtonGroup.role = 'group';
+
+        /** 画像用左回転ボタン */
+        const rotateLeftButton = document.createElement('button');
+        rotateLeftButton.className = 'btn btn-info';
+        rotateLeftButton.innerHTML = '<i class="fa fa-rotate-left"></i>';
+        rotateLeftButton.onclick = function (event) {
+            imgDeg -= 90;
+            adjustImage();
+        };
+
+        /** 画像用右回転ボタン */
+        const rotateRightButton = document.createElement('button');
+        rotateRightButton.className = 'btn btn-info';
+        rotateRightButton.innerHTML = '<i class="fa fa-rotate-right"></i>';
+        rotateRightButton.onclick = function (event) {
+            imgDeg += 90;
+            adjustImage();
+        };
+
+        /** 拡縮ボタングループ */
+        const zoomButtonGroup = document.createElement('div');
+        zoomButtonGroup.className = 'btn-group';
+        zoomButtonGroup.role = 'group';
+
+        /**拡大ボタン */
+        const zoomInButton = document.createElement('button');
+        zoomInButton.className = 'btn btn-info';
+        zoomInButton.innerHTML = '<i class="fa-solid fa-magnifying-glass-plus"></i>';
+        zoomInButton.onclick = function (event) {
+            zoomRate = zoomRates.find(zr => zr > zoomRate) ?? maxZoomRate;
+            adjustImage();
+        };
+
+        /**縮小ボタン */
+        const zoomOutButton = document.createElement('button');
+        zoomOutButton.className = 'btn btn-info';
+        zoomOutButton.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus"></i>';
+        zoomOutButton.onclick = function (event) {
+            zoomRate = zoomRates.findLast(zr => zr < zoomRate) ?? minZoomRate;
+            adjustImage();
+        };
+
+        /**高さ基準ボタン */
+        const heightBaseButton = document.createElement('button');
+        heightBaseButton.className = 'btn btn-info';
+        heightBaseButton.innerHTML = '<i class="fa-solid fa-arrows-up-down"></i>';
+        heightBaseButton.onclick = function (event) {
+            zoomRate = Math.floor((imgDiv.clientHeight / ((imgDeg % 180 === 0) ? this.img.clientHeight : this.img.clientWidth)) * 100);
+            adjustImage();
+        }.bind(this);
+
+        /**幅基準ボタン */
+        const widthBaseButton = document.createElement('button');
+        widthBaseButton.className = 'btn btn-info';
+        widthBaseButton.innerHTML = '<i class="fa-solid fa-arrows-left-right"></i>';
+        widthBaseButton.onclick = function (event) {
+            zoomRate = Math.floor((imgDiv.clientWidth / ((imgDeg % 180 === 0) ? this.img.clientWidth : this.img.clientHeight)) * 100);
+            adjustImage();
+        }.bind(this);
+
         /** 拡大率表示テキストボックス */
         const zoomRateTextBox = document.createElement('input')
         zoomRateTextBox.className = 'form-control mr-auto';
@@ -217,60 +282,6 @@ class FilePreviewDialog {
             zoomRate = Math.min(500, zoomRate);
             adjustImage();
         }
-
-        /**拡大ボタン */
-        const zoomInButton = document.createElement('button');
-        zoomInButton.className = 'btn btn-info';
-        zoomInButton.innerHTML = '<i class="fa-solid fa-magnifying-glass-plus mr-1"></i>拡大';
-        zoomInButton.onclick = function (event) {
-            zoomRate = zoomRates.find(zr => zr > zoomRate) ?? maxZoomRate;
-            adjustImage();
-        };
-
-        /**縮小ボタン */
-        const zoomOutButton = document.createElement('button');
-        zoomOutButton.className = 'btn btn-info mr-auto';
-        zoomOutButton.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus mr-1"></i>縮小';
-        zoomOutButton.onclick = function (event) {
-            zoomRate = zoomRates.findLast(zr => zr < zoomRate) ?? minZoomRate;
-            adjustImage();
-        };
-
-        /**高さ基準ボタン */
-        const heightBaseButton = document.createElement('button');
-        heightBaseButton.className = 'btn btn-info';
-        heightBaseButton.innerHTML = '高さ基準';
-        heightBaseButton.onclick = function (heightBase) {
-            zoomRate = Math.floor((imgDiv.clientHeight / ((imgDeg % 180 === 0) ? this.img.clientHeight : this.img.clientWidth)) * 100);
-            adjustImage();
-        };
-
-        /**幅基準ボタン */
-        const widthBaseButton = document.createElement('button');
-        widthBaseButton.className = 'btn btn-info mr-auto';
-        widthBaseButton.innerHTML = '幅基準';
-        widthBaseButton.onclick = function (event) {
-            zoomRate = Math.floor((imgDiv.clientWidth / ((imgDeg % 180 === 0) ? this.img.clientWidth : this.img.clientHeight)) * 100);
-            adjustImage();
-        };
-
-        /** 画像用左回転ボタン */
-        const rotateLeftButton = document.createElement('button');
-        rotateLeftButton.className = 'btn btn-info';
-        rotateLeftButton.innerHTML = '<i class="fa fa-rotate-left mr-1"></i>左回転';
-        rotateLeftButton.onclick = function (event) {
-            imgDeg -= 90;
-            adjustImage();
-        };
-
-        /** 画像用右回転ボタン */
-        const rotateRightButton = document.createElement('button');
-        rotateRightButton.className = 'btn btn-info mr-auto';
-        rotateRightButton.innerHTML = '<i class="fa fa-rotate-right mr-1"></i>右回転';
-        rotateRightButton.onclick = function (event) {
-            imgDeg += 90;
-            adjustImage();
-        };
 
         /** モーダルの親要素 */
         const oya = document.getElementById('A');
@@ -293,13 +304,15 @@ class FilePreviewDialog {
         imgDiv.appendChild(imgBetweenDiv);
         imgBetweenDiv.appendChild(this.img);
 
+        modalFooter.appendChild(rotateButtonGroup);
+        modalFooter.appendChild(zoomButtonGroup);
         modalFooter.appendChild(zoomRateTextBox);
-        modalFooter.appendChild(zoomInButton);
-        modalFooter.appendChild(zoomOutButton);
-        modalFooter.appendChild(heightBaseButton);
-        modalFooter.appendChild(widthBaseButton);
-        modalFooter.appendChild(rotateLeftButton);
-        modalFooter.appendChild(rotateRightButton);
+        rotateButtonGroup.appendChild(rotateLeftButton);
+        rotateButtonGroup.appendChild(rotateRightButton);
+        zoomButtonGroup.appendChild(zoomInButton);
+        zoomButtonGroup.appendChild(zoomOutButton);
+        zoomButtonGroup.appendChild(heightBaseButton);
+        zoomButtonGroup.appendChild(widthBaseButton);
 
         const adjustImage = () => {
 
@@ -377,8 +390,3 @@ class FilePreviewDialog {
 
 
 }
-
-
-
-
-
